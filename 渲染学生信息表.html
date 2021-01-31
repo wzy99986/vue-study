@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h3>学生信息表</h3>
+			<ul style="color:skyblue">
+				<li v-for="stus in stus">姓名：{{stus.name}}&nbsp;&nbsp;性别:{{stus.gender}}&nbsp;&nbsp;年龄：{{stus.age}}岁</li>
+			</ul>
+			<hr >
+			<h4>年龄大于18的学生信息</h4>
+			<ul style="color: red;"><li v-for="(stus,index) in filterStus">{{stus.name}}&nbsp;&nbsp;性别:{{stus.gender}}&nbsp;&nbsp;年龄：{{stus.age}}岁</li></ul>
+			<hr>
+			<h4>性别为男的学生信息</h4>
+			<!-- <ul>
+				<li v-for="(stus,index) in filterStus">{{stus.name}}&nbsp;&nbsp;性别:{{stus.gender}}&nbsp;&nbsp;年龄：{{stus.age}}岁</li>
+			</ul> -->
+		</div>
+		<script>
+			var myApp = new Vue({
+				el:'#app',
+				data:{
+					stus:[
+						{name:'学生1',gender:'男',age:'17'},
+						{name:'学生2',gender:'女',age:'20'},
+						{name:'学生3',gender:'男',age:'19'},
+						{name:'学生4',gender:'女',age:'18'}	
+					]
+				},
+				computed:{
+					filterStus:function(){
+						function checkAge(stus){
+							return stus.age > 18;
+						}
+						return this.stus.filter(checkAge)
+					},
+				},
+				
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>组件</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h4>第一次调用自定义全局组件</h4>
+      <my-component></my-component>
+      <h4>第二次调用自定义全局组件</h4>
+      <my-component></my-component>
+      <h4>这是我第一次调用局部组件</h4>
+      <local-component></local-component>
+    </div>
+    <!-- 组件mycomponent的html模板代码 -->
+    <template id="my">
+      <div>
+        <div>这是div内容</div>
+        <p>这是p的内容</p>
+      </div>
+    </template>
+    <script>
+      //创建全局组件（全局使用）,并将该组件保存到变量myComponent
+      var myComponent = Vue.extend({
+        //template:组件的html代码结构，也就是组件的界面
+        //template的第一种写法
+        // template: "<div>这是我自己创建的一个组件</div>",
+        //template的第二种写法
+        //template``里面必须要有唯一的html根表签
+        //   template: `
+        // <div>
+        //   <div>这是div内容</div>
+        //   <p>这是p的内容</p>
+        // </div>
+
+        // `,
+        template: "#my",
+        data:
+      });
+      //注册全局组件myCompoment
+      //参数1：表示主键的html代码标签名称，
+      //参数2：表示组件对象
+      Vue.component("my-component", myComponent);
+
+      //创建局部组件（局部使用），并将它保存到变量里面
+      let localComponent = Vue.extend({
+        //template:组件的html代码结构，也就是组件的界面
+        template: "<div><button>这是我自己定义的局部组件</button></div>",
+      });
+
+      var myApp = new Vue({
+        el: "#app",
+        data: {},
+        //组成局部组件的component的选项
+        components: {
+          // 注册时按照 组件名：组件对象的形式进行
+          "local-component": localComponent,
+        },
+      });
+    </script>
+  </body>
+</html>

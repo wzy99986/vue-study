@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表单处理</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h4>v-model的本质</h4>
+        <input type="text" v-bind：value='msg1' v-on:input='setMsg($event)'>
+        <p>msg1={{msg1}}</p>
+        <hr>
+        <h4>绑定文本框</h4>
+        <input type="text" v-model='msg2'>
+        <p>msg2= {{msg2}}</p>
+        <hr>
+    </div>
+    <script>
+        var myApp = new Vue({
+            el:'#app',
+            data:{
+                msg1:'hello vue',
+                msg2:'hello,vue',
+            },
+            methods:{
+                setMsg(event){
+                    this.msg1 = event.targrt.value;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

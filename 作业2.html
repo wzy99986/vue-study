@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href=""/>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<p>变量msg：{{msg}}</p>
+			<p>带有html标签的变量hello：<span v-html="hello"></span></p>
+			<p>变量abc:<a v-bind:href="abc.url">{{abc.name}}</a></p>
+			
+		</div>
+		<script>
+			var myData={
+				msg:"this is a message",
+				hello:"<marquee direction='right'><font color ='red'>我是移动的文字</font></marquee>",
+				abc:{
+					name: '百度',
+					url: 'http://www.baidu.com'
+				},
+				
+			}
+			var myApp = new Vue({
+				el:'#app',
+				data:myData,
+			});
+		</script>
+	</body>
+</html>

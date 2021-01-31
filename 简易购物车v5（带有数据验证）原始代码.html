@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Vue列表渲染</title>
+  <style>
+     *{
+        margin: 0px;
+        padding: 0px;
+     }
+     table{
+        border:1px solid #666;
+        border-collapse: collapse;
+        text-align: center;
+        margin: 0 auto;
+        width: 600px;
+     }
+
+     tr,th,td{
+        border: 1px solid #666;
+     }
+
+     input.count{
+        width: 30px;
+        text-align: center;
+     }
+     tr:last-child td{
+        text-align: left;
+     }
+     tr>th:nth-child(5){
+        cursor: pointer;
+     }
+
+     button.add{
+        width: 20px;
+     }
+
+     button.sub{
+        width: 20px;
+     }
+
+    [v-cloak]{
+        display: none;
+      }
+     #fade{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        position:fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+     } 
+     #aboutFrom{
+        width: 400px;
+        height: 160px;
+        background-color: aqua;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        left: 50%;
+        bottom:50% ;
+        margin-top: 80px;
+        margin-left: -200px;
+     }
+     h4.close{
+        float: right;
+        margin-right: 20px;
+        margin-top: 20px;
+        cursor: pointer;
+     }
+     p.content{
+       margin-top: 50px;
+       text-align: center;
+     }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+<body>
+ 	<div id="app" v-cloak>
+       <!-- //商品界面代码 -->
+        <table>
+    		<caption>我的购物车</caption>
+            <tr><th><input type="checkbox" v-model="isAll" @change ="handleChangeAll" ></th><th>编号</th><th>名称</th><th>单价</th><th>数量</th><th>总金额</th><th></th></tr>
+            <tr v-for="(goods,index) in goodsList" :key = 'goods.name'>
+                <td><input type="checkbox" v-model="goods.isChecked" @change = "handleChange"></td>
+                <td>{{index+1}}</td>
+                <td>{{goods.name}}</td>
+                <td>￥{{goods.price}}</td>
+                <td><button v-on:click="goods.count--" class="add">-</button><input type="text" v-model="goods.count" class="count"><button v-on:click="goods.count++" class="sub">+</button></td>
+                <td>￥{{goods.price*goods.count}}</td>
+                <td><button @click="goodsList.splice(index,1)">删除</button></td>
+            </tr>
+            <tr>
+                <td colspan="6">总价：￥{{ total }}</td>
+            </tr>
+        </table>
+        <!-- 添加商品界面代码 -->
+        <div id="addGoods">
+           <label for="name">名称:</label>
+           <input type="text" id="name" v-model='goodsName'>
+           <label for="price">单价:</label>
+           <input type="number" id="price" v-model.number='goodsPrice'>
+           <label for="count">数量:</label>
+           <input type="number" id="count" v-model.number='goodsCount'>
+           <a href="##" @click='addGoods'>添加</a>
+           <p v-if='isError==true' style="color: red;">商品数据不合法</p>
+        </div>
+        <div id="fade" v-show='isshow===true'>
+            <div id="aboutFrom">
+               <h4 class="close" @click="isshow=false">X</h4>
+               <p class="content">欢迎使用本购物车</p>
+            </div>
+        </div>
+ 	</div>
+
+   <script>
+ 		var vm = new Vue({
+ 			el:'#app',
+ 			data:{
+ 				goodsList:[
+                  {name:'mp3', price:'222', count:1, isChecked:false},
+     					{name:'iphone', price:'8888', count:1, isChecked:false},
+     					{name:'video', price:'542', count:1, isChecked:false}
+         		],
+                goodsName: '',
+                goodsPrice: 0,
+                goodsCount: 1,
+                isAll: false, //全选控制
+                isError: false,
+                isshow:true
+ 			},
+            methods: {
+                addGoods: function(){
+                  //  this需要先缓存，否则不代表添加的商品，或者箭头函数
+                  //  i=this.goodsList.findIndex(function(goods){
+                   if((this.goodsName=='') || (this.goodsPrice<=0) || (this.goodsCount<0 )){
+                     this.isError = true;
+                  }
+                  else{
+                     this.isError = false;
+                      i=this.goodsList.findIndex(goods=>{
+                        console.log(this);
+                      return goods.name==this.goodsName
+                   });
+                   if (i==-1){
+                   this.goodsList.unshift({
+                      name: this.goodsName,
+                      price: this.goodsPrice,
+                      count: this.goodsCount
+                   });
+                }
+                else if(i>-1){
+                       this.goodsList[i].count++;
+                     }
+               }
+             },
+            //  全选控制，当复选框状态发生变化，触发onchange事件
+            handleChangeAll:function(){
+               if(this.isAll == true){
+               for(let i = 0;i<this.goodsList.length; i++){
+                  this.goodsList[i].isChecked = true;
+               }
+               }
+               else{
+               for(let i = 0;i<this.goodsList.length;i++){
+                  this.goodsList[i].isChecked = false;
+               }
+             }
+            },
+            handleChange:function(){
+               let flag = true;
+               for(let i = 0;i<this.goodsList.length; i++){
+                  if(this.goodsList[i].isChecked == false){
+                  flag = false;
+                  break;
+               }
+               };
+               if(flag==true)
+               this.isAll = true;
+               else this.isAll = false;
+            }
+            },
+            computed: {
+                total: function(){
+                     var sum=0;
+                     for(let i=0; i<this.goodsList.length; i++)
+                     if(this.goodsList[i].isChecked==true){
+                        sum =  sum + this.goodsList[i].price*this.goodsList[i].count;
+                     }
+                     return sum;
+                }
+            },
+            watch: {
+                //通过深度监听goodsList数组，保证count的值永远大于0的整数
+                goodsList:{
+                    handler:function(newVal, oldVal){
+                        for(let i=0; i<newVal.length; i++){
+                            if(newVal[i].count < 1)
+                                this.goodsList[i].count = 1;
+                        }
+                    },
+                    deep: true
+                }  
+            }
+            
+    });
+   </script>
+</body>
+</html>

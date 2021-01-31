@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.string{
+				font-color: red;
+			}
+			.active{
+				color:blue;
+			}
+			.danger-text{
+				border: 1px solid green;
+				background: yellow;
+			}
+			.error{
+				background: red;
+			}
+			.btn-1{
+				border:1px solid green;
+			}
+			.btn-disabled{
+				background: gray;
+			}
+		</style>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h4>v-bind动态绑定class属性</h4>
+			<p v-bind:class="classA">变量语法</p>
+			<hr/>
+			<hr/>
+			<p v-bind:class="{'active':isActive,'danger-text':hasError}">对象语法</p>
+			<p v-bind:class="classObject">对象语法：用变量形式</p>
+			<p v-bind:class="classComputed">对象语法：用计算属性</p>
+			<hr />
+			<p v-bind:class="['active','danger-text']">数组语法：数组元素是常量</p>
+			<p v-bind:class="[activeClass,dangerClass]">数组语法：数组元素是变量</p>
+			<p v-bind:class="[isActive?activeClass:dangerClass,errorClass]">数组语法：数组元素三元表达式</p>
+			<p v-bind:class="[{'active'：!isActive},errorClass]">数组语法：数组元素是对象</p>
+			<p v-bind:class="classArray">数组语法：用计算属性</p>
+			<hr />
+			<hr />
+			<h4>v-bind动态绑定style属性</h4>
+			<p v-bind:style="{color: 'red',backgroundColor:'green'}">对象语法</p>
+			<p v-bind:style="[styleObject1,styleObject2]">对象数组语法</p>			
+		</div>
+		<script type="text/javascript">
+			//定义视图模型ViewModel,
+			var myApp = new Vue({
+				//挂载的视图
+				el:'#app',
+				//双向绑定数据
+				data:{
+					classA:'string',
+					isActive:true,
+					hasError:true,
+					classObject:{
+						active:true,
+						'danger-text':true
+					},
+					activeClass:'active',
+					dangerClass:'danger-text',
+					errorClass:'error',
+					size:1,
+					disabled:true,
+					styleObject1:{
+						color:'red',
+						'font-size':'40px'
+					}
+					styleObject2:{
+						'font-style':'italic'
+					}
+				},
+				computed:{
+					classComputed:function(){
+						return{
+							active:this.isActive && !this.hasError,
+							'danger-text':this.hasError != null
+						}
+					},
+					classArray:function(){
+						return[
+							'active',
+							{
+								['btn-'+this.size]:this.size !=='',
+								'btn-disabled':this.disabled
+							}
+						]
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选项卡效果</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <style type="text/css">
+        #app{
+            width: 1000px;
+            height: 500px;
+        }
+        .box{
+            width: 900px;
+            height: 400px;
+            background:palevioletred;
+        }
+        .box ul{
+            width: 100px;
+            height: 40px;
+            float: left;
+        }
+        .box ul li{
+            list-style: none;
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            float: left;
+        }
+        .box ul li button{
+            float: left;
+            cursor: pointer;
+            text-align: center;
+            width: 100px;
+            height: 40px;
+            background:palevioletred;
+            border-radius: 25px;   
+            border: 2px green solid;
+            transition-duration: 0.5s;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        .screen{
+            border: 2px oldlace solid;
+            width: 600px;
+            height: 200px;
+            transform:translateY(50%);
+            text-align: center;
+        }
+       button:hover{
+            color: white;
+       } 
+            
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <center>
+            <div class="box">
+                <ul class="h-tml">
+                    <li ><button v-for="(value,index) in content" @click="chg(index)">{{value.title}}</button></li>
+                </ul>
+                <div class="screen">
+                    <p v-for= "(value,index) in content" v-show = "value.flag">{{value.contan}}</p>
+                </div>
+            </div>
+        </center>
+    </div>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                content:[
+                    {title:'HTML5学习',contan:'欢迎来到HTML的世界',flag:true },
+                    {title:'CSS3学习',contan:'欢迎来到CSS的世界',flag:false },
+                    {title:'JAVA学习',contan:'欢迎来到JAVA的世界',flag:false },
+                    {title:'C学习',contan:'欢迎来到C语言的世界',flag:false },
+                    {title:'PHP学习',contan:'欢迎来到PHP的世界',flag:false }
+                ]  
+            },
+            methods:{
+                chg:function(ind){
+                    for(var i=0; i<this.content.length;i++){
+                        this.content[i].flag=false;
+                    }
+                    this.content[ind].flag = true;
+                }
+            }
+            })
+    </script>
+</body>
+</html>

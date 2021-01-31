@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href=""/>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+		<span>我的姓名是：{{name}}</span>
+		</div>
+		
+		<script>
+		var myData={
+			name:"小汪同学"
+		}
+		var myApp = new Vue({
+			el:'#app',
+			data:myData,
+		
+		created: function(){
+			console.log("created开始执行");
+			console.log(this.$el);
+			console.log(this.$data.name);
+		},
+		
+		mounted: function() {
+			console.log("mountd开始执行");
+			console.log(this.$el);
+			console.log(this.$data.name);
+		},
+		
+		
+			});
+		
+
+		</script>
+	</body>
+</html>

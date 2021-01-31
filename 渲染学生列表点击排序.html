@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<ul style="color: aquamarine;">
+				<button style="width:80px; height: 30px;  darkgrey; color: ;" v-on:click="sortAge">{{sortType}}</button>
+				<hr />
+				<li v-for="stus in stus">姓名：{{stus.name}}&nbsp;&nbsp;性别:{{stus.gender}}&nbsp;&nbsp;年龄：{{stus.age}}岁&nbsp;&nbsp;&nbsp;<button v-on:click="delstu(index)" style="color: coral;">X</button></li>
+			</ul>
+		</div>
+		<script>
+			myApp = new Vue({
+				el:'#app',
+				data:{
+					stus:[
+						{name:'学生1',gender:'男',age:'17'},
+						{name:'学生2',gender:'女',age:'20'},
+						{name:'学生3',gender:'男',age:'19'},
+						{name:'学生4',gender:'女',age:'18'},
+					],
+					sortType:"无序排列"
+				},
+				methods:{
+					sortAge:function(){
+						switch(this.sortType){
+							case'无序排列':
+							this.sortType = '升序排列' ;
+							this.stus.sort(function(a,b){
+								return a.age - b.age;
+							});
+							break;
+							
+							case'升序排列':
+							this.sortType = '降序排列' ;
+							this.stus.sort(function(a,b){
+								return b.age - a.age;
+							});
+							break;
+							
+							case'降序排列':
+							this.sortType = '无序排列' ;
+							this.stus.sort(function(a,b){
+								return a.name = b.name;
+							});
+							break;
+					}
+				},
+				delstu:function(index){
+					this.stus.splice(index,1)
+				}
+			}
+		})
+		</script>
+	</body>
+</html>

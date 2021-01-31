@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- 在引入ElementUI组件库之前，必须引入Vue.js框架 -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- 引入ElementUI组件库所需要的样式样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入ElementUI组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+  <div id="app">
+    <el-button @click="isShow = true">点点我，试试效果</el-button>
+    <el-dialog :visible.sync="isShow" title="欢迎">
+      <p>欢迎使用“饿了么”团队基于Vue.js打造的优秀ElementUI库</p>
+    </el-dialog>
+    <el-table :data="users" :default-sort="{prop:'age'}" border>
+        <el-table-column prop="id" label="编号"></el-table-column>
+        <el-table-column prop="name" label="姓名"></el-table-column>
+        <el-table-column prop="age" label="年龄" :sortable="true"></el-table-column>
+    </el-table>
+    <el-form>
+        <el-form-item label="编号">
+            <el-input v-model="user.id" style="width:20%"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名">
+            <el-input v-model="user.name" style="width:20%"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄">
+            <el-input v-model="user.age" style="width:20%"></el-input>
+        </el-form-item>
+        <el-button type="primary" @click="handleAdd">添加</el-button>
+    </el-form>
+  </div>
+</body>
+
+<script>
+  let myApp = new Vue({
+      el: '#app',
+      data: {
+        isShow: false,
+        users:[
+            {id: 1, name: 'u1', age: 28},
+            {id: 2, name: 'u2', age: 30},
+            {id: 3, name: 'u3', age: 21}
+        ],
+        user: {
+            id:'',
+            name: '',
+            age: ''
+        }
+      },
+      methods: {
+        handleAdd(){
+            this.users.push({id: this.user.id, name: this.user.name, age: this.user.age});
+        }
+      }
+});
+</script>
+</html>

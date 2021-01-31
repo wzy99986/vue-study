@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta http-equiv="Cache-Control" content="IE=edge" />
+			<link rel="stylesheet" href="">
+			<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+		<style type="text/css">
+			table{
+				border: aqua 1px solid;
+				border-collapse: collapse;
+				width: 600px;
+				text-align: center;
+				margin: 0 auto;
+				background-color: azure; 
+			}
+			td , th{
+				border: 1px aqua solid;
+			}
+			caption{
+				font-size: 40px;
+			}
+			button{
+				background-color: orangered;
+			}
+			input{
+				width: 50px;
+				background-color: antiquewhite;
+			}
+			tr:last-child>td{
+				text-align: center;
+			}
+			[v-cloak]{
+				display: none;
+			}
+			tr>th:nth-child(5){
+				cursor: pointer;
+			}
+		</style>
+		</head>
+	</head>
+	<body>
+		<!-- v-cloak指令可以避免在Vue实例创建前导致界面显示原始代码效果，v-cloak是解决vue实例页面抖动的最好方法 -->
+		<div id="app" v-cloak>
+			<table>
+				<caption>我的购物车</caption>
+				<tr><th>编号</th><th>名称</th><th>单价</th><th>数量</th><th v-on:click="sortSubTotal()"><span v-show="sortType==1">↓
+</span><span v-show="sortType==2">↑
+</span>总金额</th><th>操作</th></tr>
+				<tr v-for="(goods,index) in goodsList">
+					<td>{{index+1}}</td>
+					<td>{{goods.name}}</td>
+					<td>{{goods.price}}</td>
+					<td><input type="number" v-model:value="goods.count"></td>
+					<td>{{goods.price*goods.count}}</td>
+					<td><button v-on:click="delGoods(index)">X</button></td>
+				</tr> 
+				<tr><td colspan="6">总价格：{{total}}元</td></tr>
+			</table>
+		</div>
+		<script>
+			var myApp = new Vue({
+				el:'#app',
+				data:{
+					goodsList:[
+						{ name:'iphone',price:8888,count:1},
+						{ name:'mp3',price:222,count:1},
+						{ name:'video',price:542,count:1}
+					],
+					sortType:0 ,//0是无序排列，1是升序排列，2是降序排列
+					original:null
+				},
+				computed:{
+					total:function(){
+						var sum=0;
+						for(var i=0; i<this.goodsList.length;i++){
+							sum = sum + this.goodsList[i].price * this.goodsList[i].count;
+						}
+						return sum;
+					}
+				},
+				// 在视图或者数据前自动调用了该钩子函数
+				beforeUpdate:function(){
+					console.log('beforeupdate执行了一次');
+					for(var i=0; i<this.goodsList.length;i++){
+					// i是goodsList的下标,length:长度
+					if(this.goodsList[i].count<1)
+					this.goodsList[i].count = 1;
+					}
+				},
+				mounted:function(){
+					//在程序开始运行时，自动保存数组的原始数据。
+					this.original=this.goodsList.slice(0);
+				},
+				methods:{
+					delGoods:function(index){
+						var deleteArr = this.goodsList.splice(index,1);
+						var i = this.original.findIndex(function(goods){
+							return(goods.name===deleteArr[0].name)&&(goods.price===deleteArr[0].price)
+							});
+							this.original.splice(i,1);
+					},
+					sortSubTotal:function(){
+						this.sortType++ //切换排序类型
+						if(this.sortType>2)
+						this.sortType = 0; 
+						switch(this.sortType){
+							//无序
+							case 0:
+								this.goodsList = this.original.slice(0)
+								break;
+							//升序
+							case 1:
+								this.goodsList.sort(function(a,b){
+								// console.log(a.name,b.name)用console.log来看比较了几次得出升序结果
+								return a.price *a.count - b.price *b.count
+								});
+								break;
+							case 2:
+								this.goodsList.sort(function(a,b){
+								// console.log(a.name,b.name)
+								return b.price *b.count - a.price *a.count
+								})
+								break;
+						}
+					}
+				},
+			});
+		</script>
+	</body>
+</html>
